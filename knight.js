@@ -49,10 +49,13 @@ const knightMoves = (start, end) => {
   const knight = Knight(knightX, knightY);
   const target = Knight(targetX, targetY);
   const queue = [possibleMovesTree(knight)];
+  board = gameBoard();
   
   const traverse = (root) => {
     if (queue.length < 1) return;
     const tmpKnight = queue.shift();
+    const { x , y } = tmpKnight;
+    board[x][y] = 1;
     console.log(tmpKnight);
     if (tmpKnight.x === target.x && tmpKnight.y === target.y) {
       console.log('match!');
@@ -60,7 +63,8 @@ const knightMoves = (start, end) => {
     }
     while (root.child !== null) {
       console.log('push...');
-      queue.push(root.child);
+      const { x , y } = root.child;
+      if (board[x][y] !== 1) queue.push(root.child);
       root = root.child;
     }
     console.log ('queue: ', queue);
@@ -72,6 +76,6 @@ const knightMoves = (start, end) => {
   
 }
 
-// knightMoves ([3,3],[6,6]);
+knightMoves ([3,3],[6,6]);
 
 
