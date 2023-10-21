@@ -18,14 +18,14 @@ const gameBoard = () => {
 
 const possibleMovesTree = (knight) => {
   const moves = [
-    [2, 1],
-    [1, 2],
+    [ 2, 1],
+    [ 1, 2],
     [-1, 2],
     [-2, 1],
     [-2, -1],
     [-1, -2],
-    [1, -2],
-    [2, -1],
+    [ 1, -2],
+    [ 2, -1],
   ];
 
   let tempKnight = knight;
@@ -43,6 +43,35 @@ const possibleMovesTree = (knight) => {
   return knight;
 }
 
-const knight = Knight(1,1,null);
+const knightMoves = (start, end) => {
+  const [knightX, knightY] = start;
+  const [targetX, targetY] = end;
+  const knight = Knight(knightX, knightY);
+  const target = Knight(targetX, targetY);
+  const queue = [possibleMovesTree(knight)];
+  
+  const traverse = (root) => {
+    if (queue.length < 1) return;
+    const tmpKnight = queue.shift();
+    console.log(tmpKnight);
+    if (tmpKnight.x === target.x && tmpKnight.y === target.y) {
+      console.log('match!');
+      return tmpKnight;
+    }
+    while (root.child !== null) {
+      console.log('push...');
+      queue.push(root.child);
+      root = root.child;
+    }
+    console.log ('queue: ', queue);
+    traverse(possibleMovesTree(queue[0]));
+  }
+  traverse(queue[0]);
+ 
 
-console.log('Root move: ', possibleMovesTree(knight));
+  
+}
+
+// knightMoves ([3,3],[6,6]);
+
+
