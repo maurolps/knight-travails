@@ -1,6 +1,6 @@
 const CHESS_BOARD_SIZE = 8;
 
-const Knight = (x, y, child) => {
+const Knight = (x, y, child = null) => {
   return { x, y, child }
 }
 
@@ -16,8 +16,7 @@ const gameBoard = () => {
   return board;
 }
 
-const possibleMoves = (knight) => {
-  const possibleMove = [];
+const possibleMovesTree = (knight) => {
   const moves = [
     [2, 1],
     [1, 2],
@@ -29,16 +28,21 @@ const possibleMoves = (knight) => {
     [2, -1],
   ];
 
-  for (let index in moves) {
-    const moveX = knight.x + moves[index][0];
-    const moveY = knight.y + moves[index][1];
-    if (moveX >= 0 && moveY >= 0 && moveX < CHESS_BOARD_SIZE && moveY < CHESS_BOARD_SIZE)
-    possibleMove.push([moveX, moveY]);
+  let tempKnight = knight;
+  for (let [ x , y ] of moves) {
+    const moveX = knight.x + x;
+    const moveY = knight.y + y;
+    if (moveX >= 0 && moveY >= 0 && moveX < CHESS_BOARD_SIZE && moveY < CHESS_BOARD_SIZE) 
+    {
+      const newKnight = Knight(moveX, moveY);
+      tempKnight.child = newKnight;
+      tempKnight = newKnight;
+    }
   }
 
-  return possibleMove;
+  return knight;
 }
 
 const knight = Knight(1,1,null);
 
-console.log('Possible moves: ', possibleMoves(knight));
+console.log('Root move: ', possibleMovesTree(knight));
